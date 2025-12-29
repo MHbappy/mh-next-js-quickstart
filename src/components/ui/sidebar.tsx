@@ -332,6 +332,7 @@ function SidebarInput({
 }
 
 function SidebarHeader({ className, ...props }: React.ComponentProps<'div'>) {
+  console.log("className :: " + props.children)
   return (
     <div
       data-slot='sidebar-header'
