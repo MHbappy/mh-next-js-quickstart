@@ -5,24 +5,32 @@ import { IconStar } from '@tabler/icons-react';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { InteractiveGridPattern } from './interactive-grid';
-import { SignInForm } from './sign-in-form';
+import { ResetPasswordForm } from './reset-password-form';
 
 export const metadata: Metadata = {
-  title: 'Authentication',
-  description: 'Authentication forms built using the components.'
+  title: 'Reset Password',
+  description: 'Create a new password for your account'
 };
 
-export default function SignInViewPage({ stars }: { stars: number }) {
+interface ResetPasswordViewProps {
+  stars: number;
+  token: string;
+}
+
+export default function ResetPasswordView({
+  stars,
+  token
+}: ResetPasswordViewProps) {
   return (
     <div className='relative h-screen flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0'>
       <Link
-        href='/examples/authentication'
+        href='/auth/sign-in'
         className={cn(
           buttonVariants({ variant: 'ghost' }),
-          'absolute top-4 right-4 hidden md:top-8 md:right-8'
+          'absolute top-4 right-4 md:top-8 md:right-8'
         )}
       >
-        Login
+        Sign In
       </Link>
       <div className='bg-muted relative hidden h-full flex-col p-10 text-white lg:flex dark:border-r'>
         <div className='absolute inset-0 bg-zinc-900' />
@@ -78,8 +86,7 @@ export default function SignInViewPage({ stars }: { stars: number }) {
               <span className='font-display font-medium'>{stars}</span>
             </div>
           </Link>
-          <SignInForm />
-
+          <ResetPasswordForm token={token} />
           <p className='text-muted-foreground px-8 text-center text-sm'>
             By clicking continue, you agree to our{' '}
             <Link

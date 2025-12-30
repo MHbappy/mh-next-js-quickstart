@@ -1,0 +1,175 @@
+'use client';
+
+import React, {
+  createContext,
+  useCallback,
+  useEffect,
+  useState,
+  useMemo
+} from 'react';
+import { useRouter } from 'next/navigation';
+import { AuthService } from '@/lib/api/auth.service';
+import { TokenManager } from '@/lib/auth/token-manager';
+import { User, LoginRequest, SignupRequest } from '@/types/auth';
+import { toast } from 'sonner';
+
+interface AuthContextType {
+  user: User | null;
+  isLoading: boolean;
+  isAuthenticated: boolean;
+  login: (
+    data: LoginRequest
+  ) => Promise<{ success: boolean; error?: string } | undefined>;
+  signup: (
+    data: SignupRequest
+  ) => Promise<{ success: boolean; error?: string } | undefined>;
+  logout: () => Promise<void>;
+  refreshUser: () => void;
+}
+
+export const AuthContext = createContext<AuthContextType | undefined>(
+  undefined
+);
+
+export function AuthProvider({ children }: { children: React.ReactNode }) {
+  const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const router = useRouter();
+
+  // Initialize auth state from stored tokens
+  useEffect(() => {
+    const initAuth = () => {
+      const storedUser = TokenManager.getUser<User>();
+      const isAuth = TokenManager.isAuthenticated();
+
+      if (isAuth && storedUser) {
+        setUser(storedUser);
+      } else {
+        TokenManager.clearTokens();
+      }
+      setIsLoading(false);
+    };
+
+    initAuth();
+  }, []);
+
+  // Login function
+  const login = useCallback(
+    async (data: LoginRequest) => {
+      try {
+        const response = await AuthService.login(data);
+
+        if (response.success && response.data) {
+          const { accessToken, refreshToken, user: userData } = response.data;
+
+          // Store tokens and user data
+          TokenManager.setAccessToken(accessToken);
+          TokenManager.setRefreshToken(refreshToken);
+
+          // Add fullName to user object
+          const userWithFullName = {
+            ...userData,
+            fullName: `${userData.firstName} ${userData.lastName}`
+          };
+
+          TokenManager.setUser(userWithFullName);
+          setUser(userWithFullName);
+
+          toast.success('Login successful!');
+          router.push('/dashboard');
+          return { success: true };
+        }
+      } catch (error: unknown) {
+        const err = error as { response?: { data?: { message?: string } } };
+        const errorMessage =
+          err.response?.data?.message || 'Login failed. Please try again.';
+        // Don't show toast here - let the form handle error display
+        // Return error instead of throwing to prevent component re-render
+        return { success: false, error: errorMessage };
+      }
+    },
+    [router]
+  );
+
+  // Signup function
+  const signup = useCallback(
+    async (data: SignupRequest) => {
+      try {
+        const response = await AuthService.signup(data);
+
+        if (response.success && response.data) {
+          const { accessToken, refreshToken, user: userData } = response.data;
+
+          // Store tokens and user data
+          TokenManager.setAccessToken(accessToken);
+          TokenManager.setRefreshToken(refreshToken);
+
+          // Add fullName to user object
+          const userWithFullName = {
+            ...userData,
+            fullName: `${userData.firstName} ${userData.lastName}`
+          };
+
+          TokenManager.setUser(userWithFullName);
+          setUser(userWithFullName);
+
+          toast.success(
+            'Account created successfully! Please verify your email.'
+          );
+          router.push('/dashboard');
+          return { success: true };
+        }
+      } catch (error: unknown) {
+        const err = error as { response?: { data?: { message?: string } } };
+        const errorMessage =
+          err.response?.data?.message || 'Signup failed. Please try again.';
+        // Don't show toast here - let the form handle error display
+        // Return error instead of throwing to prevent component re-render
+        return { success: false, error: errorMessage };
+      }
+    },
+    [router]
+  );
+
+  // Logout function
+  const logout = useCallback(async () => {
+    try {
+      const refreshToken = TokenManager.getRefreshToken();
+
+      if (refreshToken) {
+        await AuthService.logout({ refreshToken });
+      }
+    } catch (error) {
+      console.error('Logout error:', error);
+    } finally {
+      // Clear tokens and user data regardless of API call success
+      TokenManager.clearTokens();
+      setUser(null);
+      toast.success('Logged out successfully');
+      router.push('/auth/sign-in');
+    }
+  }, [router]);
+
+  // Refresh user data
+  const refreshUser = useCallback(() => {
+    const storedUser = TokenManager.getUser<User>();
+    if (storedUser) {
+      setUser(storedUser);
+    }
+  }, []);
+
+  const value: AuthContextType = useMemo(
+    () => ({
+      user,
+      isLoading,
+      isAuthenticated: !!user && TokenManager.isAuthenticated(),
+      login,
+      signup,
+      logout,
+      refreshUser
+    }),
+    [user, isLoading, login, signup, logout, refreshUser]
+  );
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+}

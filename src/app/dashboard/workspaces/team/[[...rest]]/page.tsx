@@ -1,24 +1,34 @@
 'use client';
 
 import PageContainer from '@/components/layout/page-container';
-import { OrganizationProfile } from '@clerk/nextjs';
-import { dark } from '@clerk/themes';
-import { useTheme } from 'next-themes';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle
+} from '@/components/ui/card';
 
 export default function TeamPage() {
-  const { theme } = useTheme();
-  const isDark = theme === 'dark';
-
   return (
     <PageContainer
       pageTitle='Team Management'
       pageDescription='Manage your workspace team, members, roles, security and more.'
     >
-      <OrganizationProfile
-        appearance={{
-          baseTheme: isDark ? dark : undefined
-        }}
-      />
+      <Card>
+        <CardHeader>
+          <CardTitle>Team Settings</CardTitle>
+          <CardDescription>
+            Team management features will be implemented here
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <p className='text-muted-foreground text-sm'>
+            This area can be used to manage team members, roles, permissions,
+            and settings.
+          </p>
+        </CardContent>
+      </Card>
     </PageContainer>
   );
 }
