@@ -1,6 +1,6 @@
 'use client';
 
-import { useForm } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { Button } from '@/components/ui/button';
@@ -129,161 +129,163 @@ export default function DemoForm() {
           </p>
         </CardHeader>
         <CardContent>
-          <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
-            {/* Basic Inputs */}
-            <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
-              <FormInput
+          <FormProvider {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
+              {/* Basic Inputs */}
+              <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
+                <FormInput
+                  control={form.control}
+                  name='name'
+                  label='Full Name'
+                  placeholder='Enter your full name'
+                  required
+                />
+
+                <FormInput
+                  control={form.control}
+                  name='email'
+                  type='email'
+                  label='Email Address'
+                  placeholder='Enter your email'
+                  required
+                />
+
+                <FormInput
+                  control={form.control}
+                  name='age'
+                  type='number'
+                  label='Age'
+                  min={18}
+                  max={100}
+                  required
+                />
+
+                <FormInput
+                  control={form.control}
+                  name='password'
+                  type='password'
+                  label='Password'
+                  placeholder='Enter your password'
+                  required
+                />
+              </div>
+
+              {/* Textarea */}
+              <FormTextarea
                 control={form.control}
-                name='name'
-                label='Full Name'
-                placeholder='Enter your full name'
+                name='bio'
+                label='Bio'
+                placeholder='Tell us about yourself...'
+                description='A brief description about yourself'
+                config={{
+                  maxLength: 500,
+                  showCharCount: true,
+                  rows: 4
+                }}
                 required
               />
 
-              <FormInput
+              {/* Select */}
+              <FormSelect
                 control={form.control}
-                name='email'
-                type='email'
-                label='Email Address'
-                placeholder='Enter your email'
+                name='country'
+                label='Country'
+                placeholder='Select your country'
+                options={countryOptions}
                 required
               />
 
-              <FormInput
+              {/* Checkbox Group */}
+              <FormCheckboxGroup
                 control={form.control}
-                name='age'
-                type='number'
-                label='Age'
-                min={18}
-                max={100}
+                name='interests'
+                label='Interests'
+                description='Select all that apply'
+                options={interestOptions}
+                columns={3}
+                showBadges={true}
                 required
               />
 
-              <FormInput
+              {/* Radio Group */}
+              <FormRadioGroup
                 control={form.control}
-                name='password'
-                type='password'
-                label='Password'
-                placeholder='Enter your password'
+                name='gender'
+                label='Gender'
+                options={genderOptions}
+                orientation='horizontal'
                 required
               />
-            </div>
 
-            {/* Textarea */}
-            <FormTextarea
-              control={form.control}
-              name='bio'
-              label='Bio'
-              placeholder='Tell us about yourself...'
-              description='A brief description about yourself'
-              config={{
-                maxLength: 500,
-                showCharCount: true,
-                rows: 4
-              }}
-              required
-            />
+              {/* Switch */}
+              <FormSwitch
+                control={form.control}
+                name='newsletter'
+                label='Subscribe to Newsletter'
+                description='Receive updates about new features and products'
+              />
 
-            {/* Select */}
-            <FormSelect
-              control={form.control}
-              name='country'
-              label='Country'
-              placeholder='Select your country'
-              options={countryOptions}
-              required
-            />
+              {/* Slider */}
+              <FormSlider
+                control={form.control}
+                name='rating'
+                label='Overall Rating'
+                description='Rate your experience (0-10)'
+                config={{
+                  min: 0,
+                  max: 10,
+                  step: 0.5,
+                  formatValue: (value) => `${value}/10`
+                }}
+                showValue={true}
+              />
 
-            {/* Checkbox Group */}
-            <FormCheckboxGroup
-              control={form.control}
-              name='interests'
-              label='Interests'
-              description='Select all that apply'
-              options={interestOptions}
-              columns={3}
-              showBadges={true}
-              required
-            />
+              {/* Date Picker */}
+              <FormDatePicker
+                control={form.control}
+                name='birthDate'
+                label='Birth Date'
+                description='Your date of birth (optional)'
+                config={{
+                  maxDate: new Date(),
+                  placeholder: 'Select your birth date'
+                }}
+              />
 
-            {/* Radio Group */}
-            <FormRadioGroup
-              control={form.control}
-              name='gender'
-              label='Gender'
-              options={genderOptions}
-              orientation='horizontal'
-              required
-            />
+              {/* Single Checkbox */}
+              <FormCheckbox
+                control={form.control}
+                name='terms'
+                checkboxLabel='I agree to the Terms and Conditions'
+                description='Please read and accept our terms'
+                required
+              />
 
-            {/* Switch */}
-            <FormSwitch
-              control={form.control}
-              name='newsletter'
-              label='Subscribe to Newsletter'
-              description='Receive updates about new features and products'
-            />
+              {/* File Upload */}
+              <FormFileUpload
+                control={form.control}
+                name='avatar'
+                label='Profile Picture'
+                description='Upload a profile picture (optional)'
+                config={fileUploadConfig}
+              />
 
-            {/* Slider */}
-            <FormSlider
-              control={form.control}
-              name='rating'
-              label='Overall Rating'
-              description='Rate your experience (0-10)'
-              config={{
-                min: 0,
-                max: 10,
-                step: 0.5,
-                formatValue: (value) => `${value}/10`
-              }}
-              showValue={true}
-            />
-
-            {/* Date Picker */}
-            <FormDatePicker
-              control={form.control}
-              name='birthDate'
-              label='Birth Date'
-              description='Your date of birth (optional)'
-              config={{
-                maxDate: new Date(),
-                placeholder: 'Select your birth date'
-              }}
-            />
-
-            {/* Single Checkbox */}
-            <FormCheckbox
-              control={form.control}
-              name='terms'
-              checkboxLabel='I agree to the Terms and Conditions'
-              description='Please read and accept our terms'
-              required
-            />
-
-            {/* File Upload */}
-            <FormFileUpload
-              control={form.control}
-              name='avatar'
-              label='Profile Picture'
-              description='Upload a profile picture (optional)'
-              config={fileUploadConfig}
-            />
-
-            {/* Submit Button */}
-            <div className='flex gap-4 pt-4'>
-              <Button type='submit' className='flex-1'>
-                Submit Form
-              </Button>
-              <Button
-                type='button'
-                variant='outline'
-                onClick={() => form.reset()}
-                className='flex-1'
-              >
-                Reset
-              </Button>
-            </div>
-          </form>
+              {/* Submit Button */}
+              <div className='flex gap-4 pt-4'>
+                <Button type='submit' className='flex-1'>
+                  Submit Form
+                </Button>
+                <Button
+                  type='button'
+                  variant='outline'
+                  onClick={() => form.reset()}
+                  className='flex-1'
+                >
+                  Reset
+                </Button>
+              </div>
+            </form>
+          </FormProvider>
         </CardContent>
       </Card>
 
