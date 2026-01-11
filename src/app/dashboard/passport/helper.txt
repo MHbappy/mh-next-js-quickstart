@@ -10,6 +10,36 @@
 }
 
 
+export interface Employee {
+  id: number;
+  name: string;
+  address: string;
+  gender: string;
+  fatherName?: string;
+  isMarried?: boolean;
+  createdAt: string;
+  updatedAt: string;
+  createdBy?: number;
+  updatedBy?: number;
+}
+
+
+
+"createdAt": "2026-01-11T06:41:38.572Z",
+"updatedAt": "2026-01-11T06:41:38.572Z",
+"createdBy": 0,
+"updatedBy": 0,
+"id": 0,
+"passportType": "PERSONAL",
+"passportNumber": "string",
+"passportStatus": "ACTIVE",
+"expireDate": "2026-01-11",
+"address": "string",
+"passportAmount": 0,
+"passportPages": 0,
+"employeeId": 0
+
+
 
 PERSONAL,
     BUSINESS
