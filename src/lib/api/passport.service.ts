@@ -26,9 +26,10 @@ export class PassportService {
   }
 
   static async getPassportById(id: number): Promise<PassportSingleResponse> {
-    const response = await apiClient.get<EmployeeSingleResponse>(
+    const response = await apiClient.get<PassportSingleResponse>(
       `/passport-info/${id}`
     );
+
     return response.data;
   }
 
