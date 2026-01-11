@@ -1,0 +1,15 @@
+{
+  "passportType": "PERSONAL",
+  "passportNumber": "string1111",
+  "passportStatus": "ACTIVE",
+  "expireDate": "2026-01-07",
+  "address": "string",
+  "passportAmount": 0,
+  "passportPages": 0,
+  "employeeId": 1
+}
+
+
+
+PERSONAL,
+    BUSINESS
