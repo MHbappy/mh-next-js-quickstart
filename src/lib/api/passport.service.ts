@@ -1,16 +1,19 @@
 import {
   CreatePassportDto,
+  PassportDeleteResponse,
   PassportListResponse,
-  PassportSingleResponse
+  PassportSingleResponse,
+  UpdatePassportDTO
 } from '@/types/passport';
 import { apiClient } from './client';
+import { EmployeeSingleResponse } from '@/types/employee';
 
 export class PassportService {
   static async createPassport(
     data: CreatePassportDto
   ): Promise<PassportSingleResponse> {
     const response = await apiClient.post<PassportSingleResponse>(
-      '/passport-info',
+      `/passport-info`,
       data
     );
     return response.data;
@@ -18,7 +21,32 @@ export class PassportService {
 
   static async getAllPassport(): Promise<PassportListResponse> {
     const response =
-      await apiClient.get<PassportListResponse>('/passport-info');
+      await apiClient.get<PassportListResponse>(`/passport-info`);
+    return response.data;
+  }
+
+  static async getPassportById(id: number): Promise<PassportSingleResponse> {
+    const response = await apiClient.get<EmployeeSingleResponse>(
+      `/passport-info/${id}`
+    );
+    return response.data;
+  }
+
+  static async updateEmployee(
+    id: number,
+    data: UpdatePassportDTO
+  ): Promise<PassportSingleResponse> {
+    const response = await apiClient.put<PassportSingleResponse>(
+      `/passport-info/${id}`,
+      data
+    );
+    return response.data;
+  }
+
+  static async DeleteEmployee(id: number): Promise<PassportDeleteResponse> {
+    const response = await apiClient.delete<PassportDeleteResponse>(
+      `/passport-info/${id}`
+    );
     return response.data;
   }
 }
