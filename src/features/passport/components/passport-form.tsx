@@ -218,6 +218,4 @@ export function PassportForm({
       />
     </Form>
   );
-
-  return null;
 }
