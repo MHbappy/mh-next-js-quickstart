@@ -19,7 +19,8 @@ export const passportFormSchema = z.object({
   expireDate: z.string().min(1, 'Expire date is required').trim(),
   address: z.string().min(1, 'Expire date is required').trim(),
   passportAmount: z.number().min(0, 'Minimum 0').max(1000, 'Max 1000'),
-  passportPages: z.number().min(0, 'Minimum 0').max(50, 'Max 60')
+  passportPages: z.number().min(0, 'Minimum 0').max(50, 'Max 60'),
+  employeeId: z.number().min(0, 'Minimum 0').max(1000000000, 'Max 1000000000')
 });
 
 export type passportFormValues = z.infer<typeof passportFormSchema>;
