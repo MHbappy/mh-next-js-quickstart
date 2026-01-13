@@ -28,6 +28,9 @@ function PassportAction({
   onDelete,
   onView
 }: PassportActionProps) {
+  console.log('passport--------');
+  console.log(passport);
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>

@@ -34,7 +34,7 @@ interface DataTableProps<TData, TValue> {
 export function PassportTable<TData, TValue>({
   columns,
   data,
-  searchKey = 'name',
+  searchKey = 'passportNumber',
   searchPlaceholder = 'Search passport...'
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -127,7 +127,7 @@ export function PassportTable<TData, TValue>({
       {/* Pagination */}
       <div className='flex items-center justify-between px-2'>
         <div className='text-muted-foreground text-sm'>
-          {table.getFilteredRowModel().rows.length} employee(s) total
+          {table.getFilteredRowModel().rows.length} passport(s) total
         </div>
         <div className='flex items-center space-x-2'>
           <Button

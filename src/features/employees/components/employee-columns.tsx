@@ -29,6 +29,8 @@ function EmployeeActions({
   onDelete,
   onView
 }: EmployeeActionsProps) {
+  console.log('employee--------');
+  console.log(employee);
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>

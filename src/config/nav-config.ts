@@ -83,6 +83,16 @@ export const navItems: NavItem[] = [
     isActive: false,
     items: []
   },
+
+  {
+    title: 'Passport',
+    url: '/dashboard/passport',
+    icon: 'user',
+    shortcut: ['e', 'e'],
+    isActive: false,
+    items: []
+  },
+
   {
     title: 'Pro',
     url: '#', // Placeholder as there is no direct link for the parent

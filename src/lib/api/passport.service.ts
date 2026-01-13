@@ -33,7 +33,7 @@ export class PassportService {
     return response.data;
   }
 
-  static async updateEmployee(
+  static async updatePassport(
     id: number,
     data: UpdatePassportDTO
   ): Promise<PassportSingleResponse> {
@@ -44,7 +44,7 @@ export class PassportService {
     return response.data;
   }
 
-  static async DeleteEmployee(id: number): Promise<PassportDeleteResponse> {
+  static async deletePassport(id: number): Promise<PassportDeleteResponse> {
     const response = await apiClient.delete<PassportDeleteResponse>(
       `/passport-info/${id}`
     );

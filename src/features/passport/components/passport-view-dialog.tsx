@@ -8,24 +8,27 @@ import { User } from 'lucide-react';
 
 interface PassportDialogProps {
   open: boolean;
-  onOpenChnage: (open: boolean) => void;
+  onOpenChange: (open: boolean) => void;
   passport: Passport | null;
 }
 
-export function EmployeeViewDialog({
+export function PassportViewDialog({
   open,
-  onOpenChnage,
+  onOpenChange,
   passport
 }: PassportDialogProps) {
   if (!passport) return null;
 
+  console.log('This is passport view------');
+  console.log(passport);
+
   return (
-    <Dialog open={open} onOpenChange={onOpenChnage}>
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className='sm:max-w-[600px]'>
         <DialogHeader>
-          <DialogTitle>Employee Details</DialogTitle>
+          <DialogTitle>Passport Details</DialogTitle>
           <DialogDescription>
-            Complete information about the employee
+            Complete information about the passport
           </DialogDescription>
         </DialogHeader>
       </DialogContent>
