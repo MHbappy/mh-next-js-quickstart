@@ -15,7 +15,7 @@ export interface Passport {
 }
 
 export interface CreatePassportDto {
-  id: number;
+  // id: number;
   passportType: string;
   passportNumber: string;
   passportStatus: string;
