@@ -1,18 +1,17 @@
 'use client';
 
 import {
-  AlertDialogCancel,
-  AlertDialogFooter,
-  AlertDialogHeader
-} from '@/components/ui/alert-dialog';
-import { Passport } from '@/types/passport';
-import {
   AlertDialog,
   AlertDialogAction,
+  AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
   AlertDialogTitle
-} from '@radix-ui/react-alert-dialog';
+} from '@/components/ui/alert-dialog';
+import { Passport } from '@/types/passport';
+import { Loader2 } from 'lucide-react';
 
 interface DeletePassportDialogProps {
   open: boolean;
@@ -30,8 +29,12 @@ export function DeletePassportDialog({
   isLoading = false
 }: DeletePassportDialogProps) {
   if (!passport) return null;
+
+  console.log('THis is delete passport');
+  console.log(passport);
+
   return (
-    <AlertDialog>
+    <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
@@ -45,15 +48,16 @@ export function DeletePassportDialog({
 
         <AlertDialogFooter>
           <AlertDialogCancel disabled={isLoading}>Cancel</AlertDialogCancel>
-          <AlertDialogAction>
-            <AlertDialogAction
-              onClick={async (e) => {
-                e.preventDefault();
-                await onConfirm();
-              }}
-              disabled={isLoading}
-              className='bg-destructive text-destructive-foreground hover:bg-destructive/90'
-            ></AlertDialogAction>
+          <AlertDialogAction
+            onClick={async (e) => {
+              e.preventDefault();
+              await onConfirm();
+            }}
+            disabled={isLoading}
+            className='bg-destructive text-destructive-foreground hover:bg-destructive/90'
+          >
+            {isLoading && <Loader2 className='mr-2 size-4 animate-spin' />}
+            Delete
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

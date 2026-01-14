@@ -52,6 +52,8 @@ export function PassportListPage() {
 
   // Create employee
   const handleCreate = async (data: passportFormValues) => {
+    console.log('handle ------- create');
+
     try {
       setIsSubmitting(true);
       const response = await PassportService.createPassport(data);

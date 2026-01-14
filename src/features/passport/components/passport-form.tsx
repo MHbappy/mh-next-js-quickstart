@@ -1,9 +1,10 @@
+'use client';
+
 import { Passport, PASSPORT_STATUS, PASSPORT_TYPE } from '@/types/passport';
 import {
   passportFormSchema,
   passportFormValues
 } from '../schemas/passport-schema';
-import { EmployeeFormValues } from '@/features/employees';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect } from 'react';
@@ -16,8 +17,15 @@ import {
   FormMessage
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { SelectContent, SelectItem } from '@radix-ui/react-select';
-import { Textarea } from '@/components/ui/textarea';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from '@/components/ui/select';
+import { Loader2 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 interface PassportFormProps {
   passport?: Passport;
@@ -30,9 +38,9 @@ export function PassportForm({
   passport,
   onSubmit,
   isLoading = false,
-  submitButtonText = 'Save Employee'
+  submitButtonText = 'Save Passport'
 }: PassportFormProps) {
-  const form = useForm<passportFormValues>({
+  const form = useForm({
     resolver: zodResolver(passportFormSchema),
     defaultValues: {
       passportType: passport?.passportType || '',
@@ -40,9 +48,9 @@ export function PassportForm({
       passportStatus: passport?.passportStatus || '',
       expireDate: passport?.expireDate || '',
       address: passport?.address || '',
-      passportAmount: passport?.passportAmount || 0,
-      passportPages: passport?.passportPages || 0,
-      employeeId: passport?.employeeId || 1
+      passportAmount: passport?.passportAmount ?? 0,
+      passportPages: passport?.passportPages ?? 0,
+      employeeId: passport?.employeeId ?? 1
     }
   });
 
@@ -62,13 +70,16 @@ export function PassportForm({
   }, [passport, form]);
 
   const handleSubmit = async (data: passportFormValues) => {
+    console.log('----------button pressend');
     await onSubmit(data);
   };
 
   return (
     <Form
       form={form}
-      onSubmit={form.handleSubmit(handleSubmit)}
+      onSubmit={form.handleSubmit(handleSubmit, (errors) =>
+        console.log('❌ FORM ERRORS', errors)
+      )}
       className='space-y-6'
     >
       <FormField
@@ -79,7 +90,17 @@ export function PassportForm({
             <FormLabel>
               Passport Type <span className='text-destructive'>*</span>
             </FormLabel>
-            <FormControl>
+
+            <Select
+              onValueChange={field.onChange}
+              defaultValue={field.value}
+              disabled={isLoading}
+            >
+              <FormControl>
+                <SelectTrigger>
+                  <SelectValue placeholder='Select gender' />
+                </SelectTrigger>
+              </FormControl>
               <SelectContent>
                 {PASSPORT_TYPE.map((option) => (
                   <SelectItem key={option.value} value={option.value}>
@@ -87,10 +108,30 @@ export function PassportForm({
                   </SelectItem>
                 ))}
               </SelectContent>
-            </FormControl>
+            </Select>
           </FormItem>
         )}
       ></FormField>
+
+      <FormField
+        control={form.control}
+        name='address'
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>
+              Address <span className='text-destructive'>*</span>
+            </FormLabel>
+            <FormControl>
+              <Input
+                placeholder='Enter Address'
+                {...field}
+                disabled={isLoading}
+              />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
 
       <FormField
         control={form.control}
@@ -98,7 +139,7 @@ export function PassportForm({
         render={({ field }) => (
           <FormItem>
             <FormLabel>
-              Address <span className='text-destructive'>*</span>
+              Passport Number <span className='text-destructive'>*</span>
             </FormLabel>
             <FormControl>
               <Input
@@ -120,7 +161,17 @@ export function PassportForm({
             <FormLabel>
               Passport Status<span className='text-destructive'>*</span>
             </FormLabel>
-            <FormControl>
+
+            <Select
+              onValueChange={field.onChange}
+              defaultValue={field.value}
+              disabled={isLoading}
+            >
+              <FormControl>
+                <SelectTrigger>
+                  <SelectValue placeholder='Select gender' />
+                </SelectTrigger>
+              </FormControl>
               <SelectContent>
                 {PASSPORT_STATUS.map((option) => (
                   <SelectItem key={option.value} value={option.value}>
@@ -128,7 +179,7 @@ export function PassportForm({
                   </SelectItem>
                 ))}
               </SelectContent>
-            </FormControl>
+            </Select>
           </FormItem>
         )}
       ></FormField>
@@ -139,7 +190,7 @@ export function PassportForm({
         render={({ field }) => (
           <FormItem>
             <FormLabel>
-              Address <span className='text-destructive'>*</span>
+              Expire Date <span className='text-destructive'>*</span>
             </FormLabel>
             <FormControl>
               <Input
@@ -160,14 +211,24 @@ export function PassportForm({
         render={({ field }) => (
           <FormItem>
             <FormLabel>
-              Address <span className='text-destructive'>*</span>
+              Passport Amount <span className='text-destructive'>*</span>
             </FormLabel>
             <FormControl>
               <Input
                 type='number'
                 placeholder='Enter passport amount'
-                {...field}
                 disabled={isLoading}
+                value={
+                  typeof field.value === 'number' ||
+                  typeof field.value === 'string'
+                    ? field.value
+                    : ''
+                }
+                onChange={(e) =>
+                  field.onChange(
+                    e.target.value === '' ? undefined : Number(e.target.value)
+                  )
+                }
               />
             </FormControl>
             <FormMessage />
@@ -181,14 +242,24 @@ export function PassportForm({
         render={({ field }) => (
           <FormItem>
             <FormLabel>
-              Address <span className='text-destructive'>*</span>
+              Passport Page <span className='text-destructive'>*</span>
             </FormLabel>
             <FormControl>
               <Input
                 type='number'
                 placeholder='Enter passport page'
-                {...field}
                 disabled={isLoading}
+                value={
+                  typeof field.value === 'number' ||
+                  typeof field.value === 'string'
+                    ? field.value
+                    : ''
+                }
+                onChange={(e) =>
+                  field.onChange(
+                    e.target.value === '' ? undefined : Number(e.target.value)
+                  )
+                }
               />
             </FormControl>
             <FormMessage />
@@ -202,20 +273,45 @@ export function PassportForm({
         render={({ field }) => (
           <FormItem>
             <FormLabel>
-              Address <span className='text-destructive'>*</span>
+              Employee Id <span className='text-destructive'>*</span>
             </FormLabel>
             <FormControl>
-              <Input
+              {/* <Input
                 type='number'
                 placeholder='Enter employee ID'
                 {...field}
                 disabled={isLoading}
+              /> */}
+
+              <Input
+                type='number'
+                placeholder='Enter employee ID'
+                disabled={isLoading}
+                value={
+                  typeof field.value === 'number' ||
+                  typeof field.value === 'string'
+                    ? field.value
+                    : ''
+                }
+                onChange={(e) =>
+                  field.onChange(
+                    e.target.value === '' ? undefined : Number(e.target.value)
+                  )
+                }
               />
             </FormControl>
             <FormMessage />
           </FormItem>
         )}
       />
+
+      {/* Submit Button */}
+      <div className='flex justify-end gap-4'>
+        <Button type='submit' disabled={isLoading}>
+          {isLoading && <Loader2 className='mr-2 size-4 animate-spin' />}
+          {submitButtonText}
+        </Button>
+      </div>
     </Form>
   );
 }

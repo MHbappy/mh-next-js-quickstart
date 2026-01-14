@@ -1,3 +1,5 @@
+'use client';
+
 import { Passport } from '@/types/passport';
 import { passportFormValues } from '../schemas/passport-schema';
 import { Dialog, DialogContent, DialogHeader } from '@/components/ui/dialog';

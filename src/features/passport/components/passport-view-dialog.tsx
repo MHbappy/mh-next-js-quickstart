@@ -20,7 +20,8 @@ export function PassportViewDialog({
   if (!passport) return null;
 
   console.log('This is passport view------');
-  console.log(passport);
+  console.log(passport.passportType);
+  console.log(open);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -31,82 +32,84 @@ export function PassportViewDialog({
             Complete information about the passport
           </DialogDescription>
         </DialogHeader>
-      </DialogContent>
 
-      <div className='space-y-6'>
-        <div className='space-y-4'>
-          <div className='flex items-start gap-3'>
-            <User className='text-muted-foreground mt-1 size-5' />
-            <div className='flex-1'>
-              <p className='text-muted-foreground text-sm font-medium'>
-                Passport Type
-              </p>
-              <p className='text-base font-semibold'>{passport.passportType}</p>
+        <div className='space-y-6'>
+          <div className='space-y-4'>
+            <div className='flex items-start gap-3'>
+              <User className='text-muted-foreground mt-1 size-5' />
+              <div className='flex-1'>
+                <p className='text-muted-foreground text-sm font-medium'>
+                  Passport Type
+                </p>
+                <p className='text-base font-semibold'>
+                  {passport.passportType}
+                </p>
+              </div>
             </div>
-          </div>
-          <Separator />
+            <Separator />
 
-          <div className='flex items-start gap-3'>
-            <User className='text-muted-foreground mt-1 size-5' />
-            <div className='flex-1'>
-              <p className='text-muted-foreground text-sm font-medium'>
-                Passport Number
-              </p>
-              <p className='text-base font-semibold'>
-                {passport.passportNumber}
-              </p>
+            <div className='flex items-start gap-3'>
+              <User className='text-muted-foreground mt-1 size-5' />
+              <div className='flex-1'>
+                <p className='text-muted-foreground text-sm font-medium'>
+                  Passport Number
+                </p>
+                <p className='text-base font-semibold'>
+                  {passport.passportNumber}
+                </p>
+              </div>
             </div>
-          </div>
 
-          <Separator />
-          <div className='flex items-start gap-3'>
-            <User className='text-muted-foreground mt-1 size-5' />
-            <div className='flex-1'>
-              <p className='text-muted-foreground text-sm font-medium'>
-                Passport Number
-              </p>
-              <p className='text-base font-semibold'>
-                {passport.passportNumber}
-              </p>
+            <Separator />
+            <div className='flex items-start gap-3'>
+              <User className='text-muted-foreground mt-1 size-5' />
+              <div className='flex-1'>
+                <p className='text-muted-foreground text-sm font-medium'>
+                  Passport Number
+                </p>
+                <p className='text-base font-semibold'>
+                  {passport.passportNumber}
+                </p>
+              </div>
             </div>
-          </div>
 
-          <Separator />
-          <div className='flex items-start gap-3'>
-            <User className='text-muted-foreground mt-1 size-5' />
-            <div className='flex-1'>
-              <p className='text-muted-foreground text-sm font-medium'>
-                Passport Status
-              </p>
-              <p className='text-base font-semibold'>
-                {passport.passportStatus}
-              </p>
+            <Separator />
+            <div className='flex items-start gap-3'>
+              <User className='text-muted-foreground mt-1 size-5' />
+              <div className='flex-1'>
+                <p className='text-muted-foreground text-sm font-medium'>
+                  Passport Status
+                </p>
+                <p className='text-base font-semibold'>
+                  {passport.passportStatus}
+                </p>
+              </div>
             </div>
-          </div>
 
-          <Separator />
-          <div className='flex items-start gap-3'>
-            <User className='text-muted-foreground mt-1 size-5' />
-            <div className='flex-1'>
-              <p className='text-muted-foreground text-sm font-medium'>
-                Expire Date
-              </p>
-              <p className='text-base font-semibold'>{passport.expireDate}</p>
+            <Separator />
+            <div className='flex items-start gap-3'>
+              <User className='text-muted-foreground mt-1 size-5' />
+              <div className='flex-1'>
+                <p className='text-muted-foreground text-sm font-medium'>
+                  Expire Date
+                </p>
+                <p className='text-base font-semibold'>{passport.expireDate}</p>
+              </div>
             </div>
-          </div>
 
-          <Separator />
-          <div className='flex items-start gap-3'>
-            <User className='text-muted-foreground mt-1 size-5' />
-            <div className='flex-1'>
-              <p className='text-muted-foreground text-sm font-medium'>
-                Address
-              </p>
-              <p className='text-base font-semibold'>{passport.address}</p>
+            <Separator />
+            <div className='flex items-start gap-3'>
+              <User className='text-muted-foreground mt-1 size-5' />
+              <div className='flex-1'>
+                <p className='text-muted-foreground text-sm font-medium'>
+                  Address
+                </p>
+                <p className='text-base font-semibold'>{passport.address}</p>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </DialogContent>
     </Dialog>
   );
 }
