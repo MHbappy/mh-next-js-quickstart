@@ -8,6 +8,7 @@ import {
   CardHeader,
   CardTitle
 } from '@/components/ui/card';
+import ChangePasswordForm from './change-password-form';
 
 export default function ProfileViewPage() {
   const { user } = useUser();
@@ -54,9 +55,7 @@ export default function ProfileViewPage() {
           <CardDescription>Manage your account preferences</CardDescription>
         </CardHeader>
         <CardContent>
-          <p className='text-muted-foreground text-sm'>
-            Profile management features will be implemented here.
-          </p>
+          <ChangePasswordForm />
         </CardContent>
       </Card>
     </div>

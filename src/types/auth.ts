@@ -8,6 +8,7 @@ export interface User {
   roles: string[];
   fullName?: string;
   imageUrl?: string;
+  provider?: string;
 }
 
 export interface AuthResponse {
@@ -69,4 +70,9 @@ export interface RefreshTokenRequest {
 
 export interface LogoutRequest {
   refreshToken: string;
+}
+
+export interface ChangePasswordRequest {
+  oldPassword: string;
+  newPassword: string;
 }

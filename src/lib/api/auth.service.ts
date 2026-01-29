@@ -7,7 +7,8 @@ import {
   ForgotPasswordRequest,
   ResetPasswordRequest,
   RefreshTokenRequest,
-  LogoutRequest
+  LogoutRequest,
+  ChangePasswordRequest
 } from '@/types/auth';
 
 export class AuthService {
@@ -105,6 +106,20 @@ export class AuthService {
     }>(
       `/auth/reset-password?token=${token}&newPassword=${encodeURIComponent(newPassword)}`
     );
+    return response.data;
+  }
+
+  /**
+   * Change Password
+   * POST /api/v1/auth/change-password
+   */
+  static async changePassword(
+    data: ChangePasswordRequest
+  ): Promise<{ success: boolean; message: string }> {
+    const response = await apiClient.post<{
+      success: boolean;
+      message: string;
+    }>('/auth/change-password', data);
     return response.data;
   }
 }
