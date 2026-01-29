@@ -24,10 +24,15 @@ import { NavItem } from '@/types';
  *    access: { feature: 'premium_access' }
  *
  * 5. Require specific role:
- *    access: { role: 'admin' }
+ *    access: { role: 'ROLE_ADMIN' }
  *
  * 6. Multiple conditions (all must be true):
  *    access: { requireOrg: true, permission: 'org:teams:manage', plan: 'pro' }
+ *
+ * Available Roles:
+ * - ROLE_USER: Basic user access
+ * - ROLE_MODERATOR: Moderator access
+ * - ROLE_ADMIN: Administrator access
  *
  * Note: The `visible` function is deprecated but still supported for backward compatibility.
  * Use the `access` property for new items.
@@ -40,6 +45,7 @@ export const navItems: NavItem[] = [
     isActive: false,
     shortcut: ['d', 'd'],
     items: []
+    // No access restriction - all authenticated users can see
   },
   {
     title: 'Product',
@@ -47,7 +53,17 @@ export const navItems: NavItem[] = [
     icon: 'product',
     shortcut: ['p', 'p'],
     isActive: false,
-    items: []
+    items: [],
+    access: { role: 'ROLE_USER' } // Requires ROLE_USER or higher
+  },
+  {
+    title: 'Kanban',
+    url: '/dashboard/kanban',
+    icon: 'kanban',
+    shortcut: ['k', 'k'],
+    isActive: false,
+    items: [],
+    access: { role: 'ROLE_MODERATOR' } // Requires ROLE_MODERATOR or higher
   },
   {
     title: 'Account',
@@ -60,16 +76,14 @@ export const navItems: NavItem[] = [
         url: '/dashboard/profile',
         icon: 'profile',
         shortcut: ['m', 'm']
+        // No access restriction
       },
       {
         title: 'Billing',
         url: '/dashboard/billing',
         icon: 'billing',
         shortcut: ['b', 'b'],
-        // Only show billing if in organization context
-        access: { requireOrg: true }
-        // Alternative: require billing management permission
-        // access: { requireOrg: true, permission: 'org:manage:billing' }
+        access: { role: 'ROLE_ADMIN' } // Only admins can see billing
       }
     ]
   }

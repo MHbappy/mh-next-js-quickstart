@@ -32,7 +32,7 @@ import { NavItem } from '@/types';
  * Note: The `visible` function is deprecated but still supported for backward compatibility.
  * Use the `access` property for new items.
  */
-export const navItems: NavItem[] = [
+export const navItemsDemo: NavItem[] = [
   {
     title: 'Dashboard',
     url: '/dashboard/overview',

@@ -5,6 +5,7 @@ export interface User {
   lastName: string;
   emailVerified: boolean;
   status: 'ACTIVE' | 'INACTIVE' | 'LOCKED';
+  roles: string[];
   fullName?: string;
   imageUrl?: string;
 }

@@ -21,6 +21,32 @@ import { useUser } from '@/hooks/use-user';
 import type { NavItem } from '@/types';
 
 /**
+ * Check if user has access to a navigation item based on role
+ */
+function hasAccess(item: NavItem, userRoles: string[] | undefined): boolean {
+  // No access restrictions - show to everyone
+  if (!item.access) {
+    return true;
+  }
+
+  // Has access restrictions but user not authenticated
+  if (!userRoles || userRoles.length === 0) {
+    return false;
+  }
+
+  const { role } = item.access;
+
+  // Check role requirement
+  if (role && !userRoles.includes(role)) {
+    return false;
+  }
+
+  // Add other checks as needed (requireOrg, permission, plan, feature)
+  // For now, if role check passes (or no role specified), grant access
+  return true;
+}
+
+/**
  * Hook to filter navigation items based on RBAC (fully client-side)
  *
  * @param items - Array of navigation items to filter
@@ -29,39 +55,18 @@ import type { NavItem } from '@/types';
 export function useFilteredNavItems(items: NavItem[]) {
   const { user } = useUser();
 
-  // Memoize context
-  const accessContext = useMemo(() => {
-    return {
-      user: user ?? undefined,
-      hasUser: !!user
-    };
-  }, [user?.id]);
-
   // Filter items synchronously (all client-side)
   const filteredItems = useMemo(() => {
-    return items
-      .filter((item) => {
-        // No access restrictions
-        if (!item.access) {
-          return true;
-        }
+    const userRoles = user?.roles;
 
-        // For now, show all items if user is authenticated
-        // You can add more complex filtering logic here based on your needs
-        return accessContext.hasUser;
-      })
+    return items
+      .filter((item) => hasAccess(item, userRoles))
       .map((item) => {
         // Recursively filter child items
         if (item.items && item.items.length > 0) {
-          const filteredChildren = item.items.filter((childItem) => {
-            // No access restrictions
-            if (!childItem.access) {
-              return true;
-            }
-
-            // For now, show all child items if user is authenticated
-            return accessContext.hasUser;
-          });
+          const filteredChildren = item.items.filter((childItem) =>
+            hasAccess(childItem, userRoles)
+          );
 
           return {
             ...item,
@@ -71,7 +76,7 @@ export function useFilteredNavItems(items: NavItem[]) {
 
         return item;
       });
-  }, [items, accessContext]);
+  }, [items, user?.roles]);
 
   return filteredItems;
 }

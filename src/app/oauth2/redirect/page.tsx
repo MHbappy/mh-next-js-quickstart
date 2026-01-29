@@ -7,10 +7,12 @@ import { TokenManager } from '@/lib/auth/token-manager';
 import { User } from '@/types/auth';
 import { Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
+import { useAuth } from '@/hooks/use-auth';
 
 function OAuth2RedirectContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
+  const { refreshUser } = useAuth();
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -18,7 +20,7 @@ function OAuth2RedirectContent() {
       const token = searchParams.get('token');
       const errorParam = searchParams.get('error');
 
-      // Handle error from OAuth2 provider
+      // ... existing error checks ...
       if (errorParam) {
         setError(errorParam);
         toast.error(`OAuth2 login failed: ${errorParam}`);
@@ -28,7 +30,6 @@ function OAuth2RedirectContent() {
         return;
       }
 
-      // Check if token is present
       if (!token) {
         setError('No token received from OAuth2 provider');
         toast.error('OAuth2 login failed: No token received');
@@ -39,7 +40,6 @@ function OAuth2RedirectContent() {
       }
 
       try {
-        // Exchange OAuth2 token for JWT tokens via /api/v1/auth/oauth2/token
         const response = await AuthService.oauth2Login({
           token,
           provider: 'google'
@@ -48,16 +48,17 @@ function OAuth2RedirectContent() {
         if (response.success && response.data) {
           const { accessToken, refreshToken, user: userData } = response.data;
 
-          // Store tokens
           TokenManager.setAccessToken(accessToken);
           TokenManager.setRefreshToken(refreshToken);
 
-          // Add fullName to user object and store
           const userWithFullName: User = {
             ...userData,
             fullName: `${userData.firstName} ${userData.lastName}`
           };
           TokenManager.setUser(userWithFullName);
+
+          // Update auth context state immediately
+          refreshUser();
 
           toast.success('Google login successful!');
           router.push('/dashboard');
