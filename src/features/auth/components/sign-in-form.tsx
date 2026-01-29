@@ -17,6 +17,7 @@ import { useAuth } from '@/hooks/use-auth';
 import Link from 'next/link';
 import { Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
+import GoogleSignInButton from './google-auth-button';
 
 const loginSchema = z.object({
   email: z.string().email('Please enter a valid email address'),
@@ -104,6 +105,21 @@ export function SignInForm() {
         <p className='text-muted-foreground text-sm'>
           Enter your email and password to sign in
         </p>
+      </div>
+
+      {/* Google OAuth Button */}
+      <GoogleSignInButton />
+
+      {/* Divider */}
+      <div className='relative'>
+        <div className='absolute inset-0 flex items-center'>
+          <span className='w-full border-t' />
+        </div>
+        <div className='relative flex justify-center text-xs uppercase'>
+          <span className='bg-background text-muted-foreground px-2'>
+            Or continue with email
+          </span>
+        </div>
       </div>
 
       <FormProvider {...form}>

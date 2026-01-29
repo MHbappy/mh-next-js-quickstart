@@ -7,7 +7,9 @@ const publicRoutes = [
   '/auth/sign-up',
   '/auth/forgot-password',
   '/auth/reset-password',
-  '/auth/verify-email'
+  '/auth/verify-email',
+  '/auth/oauth2/callback',
+  '/oauth2/redirect'
 ];
 
 // Define routes that should redirect to dashboard if already authenticated

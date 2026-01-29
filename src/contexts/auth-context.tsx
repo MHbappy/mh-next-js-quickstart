@@ -46,12 +46,42 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setUser(storedUser);
       } else {
         TokenManager.clearTokens();
+        setUser(null);
       }
       setIsLoading(false);
     };
 
     initAuth();
-  }, []);
+
+    // Check auth state when tab becomes visible (detects manual cookie deletion)
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        const isAuth = TokenManager.isAuthenticated();
+        if (!isAuth && user) {
+          TokenManager.clearTokens();
+          setUser(null);
+          router.push('/auth/sign-in');
+        }
+      }
+    };
+
+    // Also check periodically (every 5 seconds) for token changes
+    const intervalId = setInterval(() => {
+      const isAuth = TokenManager.isAuthenticated();
+      if (!isAuth && user) {
+        TokenManager.clearTokens();
+        setUser(null);
+        router.push('/auth/sign-in');
+      }
+    }, 5000);
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      clearInterval(intervalId);
+    };
+  }, [user, router]);
 
   // Login function
   const login = useCallback(
