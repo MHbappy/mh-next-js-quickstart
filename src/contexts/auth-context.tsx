@@ -36,7 +36,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
-  // Initialize auth state from stored tokens
+  // Initialize auth state from stored tokens (runs once on mount)
   useEffect(() => {
     const initAuth = () => {
       const storedUser = TokenManager.getUser<User>();
@@ -52,12 +52,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     };
 
     initAuth();
+  }, []);
 
+  // Separate effect for token validation checks
+  useEffect(() => {
     // Check auth state when tab becomes visible (detects manual cookie deletion)
     const handleVisibilityChange = () => {
       if (document.visibilityState === 'visible') {
         const isAuth = TokenManager.isAuthenticated();
-        if (!isAuth && user) {
+        const currentUser = TokenManager.getUser<User>();
+
+        if (!isAuth && currentUser) {
           TokenManager.clearTokens();
           setUser(null);
           router.push('/auth/sign-in');
@@ -68,7 +73,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     // Also check periodically (every 5 seconds) for token changes
     const intervalId = setInterval(() => {
       const isAuth = TokenManager.isAuthenticated();
-      if (!isAuth && user) {
+      const currentUser = TokenManager.getUser<User>();
+
+      if (!isAuth && currentUser) {
         TokenManager.clearTokens();
         setUser(null);
         router.push('/auth/sign-in');
@@ -81,7 +88,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
       clearInterval(intervalId);
     };
-  }, [user, router]);
+  }, [router]);
 
   // Login function
   const login = useCallback(
