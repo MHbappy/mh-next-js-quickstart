@@ -66,6 +66,15 @@ export const navItems: NavItem[] = [
     access: { role: 'ROLE_MODERATOR' } // Requires ROLE_MODERATOR or higher
   },
   {
+    title: 'User Management',
+    url: '/dashboard/admin/users',
+    icon: 'users',
+    shortcut: ['u', 'm'],
+    isActive: false,
+    items: [],
+    access: { role: 'ROLE_ADMIN' } // Requires ROLE_ADMIN only
+  },
+  {
     title: 'Account',
     url: '#', // Placeholder as there is no direct link for the parent
     icon: 'account',
