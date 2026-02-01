@@ -7,11 +7,12 @@ import { useAuth } from './use-auth';
  * Returns user data and loading state
  */
 export function useUser() {
-  const { user, isLoading } = useAuth();
+  const { user, isLoading, refreshUser } = useAuth();
 
   return {
     user,
     isLoaded: !isLoading,
-    isSignedIn: !!user
+    isSignedIn: !!user,
+    mutate: refreshUser
   };
 }

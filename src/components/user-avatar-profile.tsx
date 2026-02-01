@@ -4,7 +4,7 @@ interface UserAvatarProfileProps {
   className?: string;
   showInfo?: boolean;
   user: {
-    imageUrl?: string;
+    avatarUrl?: string;
     fullName?: string | null;
     email?: string;
     firstName?: string;
@@ -29,7 +29,7 @@ export function UserAvatarProfile({
   return (
     <div className='flex items-center gap-2'>
       <Avatar className={className}>
-        <AvatarImage src={user?.imageUrl || ''} alt={displayName || ''} />
+        <AvatarImage src={user?.avatarUrl || ''} alt={displayName || ''} />
         <AvatarFallback className='rounded-lg'>
           {displayName?.slice(0, 2)?.toUpperCase() || 'CN'}
         </AvatarFallback>

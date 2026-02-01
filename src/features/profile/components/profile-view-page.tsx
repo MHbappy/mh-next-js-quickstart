@@ -10,6 +10,7 @@ import {
   CardTitle
 } from '@/components/ui/card';
 import ChangePasswordForm from './change-password-form';
+import ProfileForm from './profile-form';
 import { cn } from '@/lib/utils';
 import { User, Lock, Settings, UserCircle } from 'lucide-react';
 
@@ -71,29 +72,12 @@ export default function ProfileViewPage() {
             <Card>
               <CardHeader>
                 <CardTitle>Personal Information</CardTitle>
-                <CardDescription>Your account details</CardDescription>
+                <CardDescription>
+                  Update your personal details and public profile information.
+                </CardDescription>
               </CardHeader>
-              <CardContent className='space-y-4'>
-                <div>
-                  <label className='text-sm font-medium'>Name</label>
-                  <p className='text-muted-foreground'>
-                    {user?.fullName || `${user?.firstName} ${user?.lastName}`}
-                  </p>
-                </div>
-                <div>
-                  <label className='text-sm font-medium'>Email</label>
-                  <p className='text-muted-foreground'>{user?.email}</p>
-                </div>
-                <div>
-                  <label className='text-sm font-medium'>Status</label>
-                  <p className='text-muted-foreground'>{user?.status}</p>
-                </div>
-                <div>
-                  <label className='text-sm font-medium'>Email Verified</label>
-                  <p className='text-muted-foreground'>
-                    {user?.emailVerified ? 'Yes' : 'No'}
-                  </p>
-                </div>
+              <CardContent>
+                <ProfileForm />
               </CardContent>
             </Card>
           </div>

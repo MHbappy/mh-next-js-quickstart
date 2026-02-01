@@ -25,6 +25,7 @@ export interface User {
   roles: string[];
   createdAt: string;
   updatedAt: string;
+  avatarUrl?: string;
 }
 
 export interface UserListResponse {

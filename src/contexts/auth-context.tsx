@@ -187,11 +187,37 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }, [router]);
 
-  // Refresh user data
-  const refreshUser = useCallback(() => {
-    const storedUser = TokenManager.getUser<User>();
-    if (storedUser) {
-      setUser(storedUser);
+  // Refresh user data from API
+  const refreshUser = useCallback(async () => {
+    try {
+      // Fetch fresh user data from API
+      const response = await AuthService.getProfile();
+
+      if (response.success && response.data) {
+        const userData = response.data;
+
+        // Add fullName to user object
+        const userWithFullName = {
+          ...userData,
+          fullName:
+            userData.firstName && userData.lastName
+              ? `${userData.firstName} ${userData.lastName}`
+              : userData.firstName || userData.lastName || userData.email
+        };
+
+        // Update localStorage
+        TokenManager.setUser(userWithFullName);
+
+        // Update React state
+        setUser(userWithFullName);
+      }
+    } catch (error) {
+      console.error('Failed to refresh user data:', error);
+      // Fallback to localStorage if API call fails
+      const storedUser = TokenManager.getUser<User>();
+      if (storedUser) {
+        setUser(storedUser);
+      }
     }
   }, []);
 

@@ -122,4 +122,17 @@ export class AuthService {
     }>('/auth/change-password', data);
     return response.data;
   }
+
+  /**
+   * Get Current User Profile
+   * GET /api/v1/profile
+   */
+  static async getProfile(): Promise<{
+    success: boolean;
+    message: string;
+    data: any;
+  }> {
+    const response = await apiClient.get('/profile');
+    return response.data;
+  }
 }

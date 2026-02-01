@@ -7,7 +7,7 @@ export interface User {
   status: 'ACTIVE' | 'INACTIVE' | 'LOCKED';
   roles: string[];
   fullName?: string;
-  imageUrl?: string;
+  avatarUrl?: string;
   provider?: string;
 }
 
