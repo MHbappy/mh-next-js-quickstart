@@ -1,0 +1,56 @@
+import { apiClient } from './client';
+
+export interface SubscriptionPlan {
+  id: number;
+  name: string;
+  price: number;
+  currency: string;
+  interval: string;
+  features: string[];
+  active: boolean;
+}
+
+export interface CheckoutResponse {
+  sessionId: string;
+  url: string;
+}
+
+export async function getActivePlans(): Promise<SubscriptionPlan[]> {
+  const response = await apiClient.get<SubscriptionPlan[]>('/payment/plans');
+  return response.data;
+}
+
+export async function initiateCheckout(
+  planId: number,
+  gateway?: string
+): Promise<CheckoutResponse> {
+  const response = await apiClient.post<CheckoutResponse>('/payment/checkout', {
+    planId,
+    gateway,
+    successUrl: window.location.origin + '/dashboard/billing?success=true',
+    cancelUrl: window.location.origin + '/dashboard/billing?canceled=true'
+  });
+  return response.data;
+}
+
+export async function getMySubscription(): Promise<any> {
+  try {
+    const response = await apiClient.get('/payment/subscription');
+    if (response.status === 204) return null;
+    return response.data;
+  } catch (error: any) {
+    // If 404/204, return null (no subscription)
+    if (
+      error.response &&
+      (error.response.status === 404 || error.response.status === 204)
+    ) {
+      return null;
+    }
+    throw error;
+  }
+}
+
+export async function getEnabledGateways(): Promise<string[]> {
+  const response = await apiClient.get<string[]>('/payment/config');
+  return response.data;
+}
