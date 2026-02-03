@@ -175,3 +175,22 @@ export async function getActiveSubscribers(
 export async function cancelUserSubscription(userId: number): Promise<void> {
   await apiClient.post(`/admin/payment/subscription/cancel/${userId}`);
 }
+
+export async function downloadUserInvoice(
+  transactionId: number
+): Promise<void> {
+  const response = await apiClient.get<Blob>(
+    `/admin/payment/invoices/${transactionId}`,
+    {
+      responseType: 'blob'
+    }
+  );
+
+  const url = window.URL.createObjectURL(new Blob([response.data]));
+  const link = document.createElement('a');
+  link.href = url;
+  link.setAttribute('download', `invoice_${transactionId}.pdf`);
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+}

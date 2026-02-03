@@ -1,4 +1,8 @@
-import { PaymentTransaction } from '@/lib/api/subscription.service';
+import {
+  PaymentTransaction,
+  downloadInvoice
+} from '@/lib/api/subscription.service';
+import { downloadUserInvoice } from '@/lib/api/admin-payment.service';
 import {
   Table,
   TableBody,
@@ -8,7 +12,11 @@ import {
   TableRow
 } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { format } from 'date-fns';
+import { Download, Loader2 } from 'lucide-react';
+import { useState } from 'react';
+import { toast } from 'sonner';
 
 interface PaymentHistoryTableProps {
   transactions: PaymentTransaction[];
@@ -19,6 +27,25 @@ export function PaymentHistoryTable({
   transactions,
   isAdmin = false
 }: PaymentHistoryTableProps) {
+  const [downloadingId, setDownloadingId] = useState<number | null>(null);
+
+  const handleDownload = async (transactionId: number) => {
+    try {
+      setDownloadingId(transactionId);
+      if (isAdmin) {
+        await downloadUserInvoice(transactionId);
+      } else {
+        await downloadInvoice(transactionId);
+      }
+      toast.success('Invoice downloaded successfully');
+    } catch (error) {
+      console.error(error);
+      toast.error('Failed to download invoice');
+    } finally {
+      setDownloadingId(null);
+    }
+  };
+
   if (!transactions || transactions.length === 0) {
     return (
       <div className='py-8 text-center text-gray-500'>
@@ -66,9 +93,19 @@ export function PaymentHistoryTable({
               </TableCell>
               <TableCell>{tx.gateway}</TableCell>
               <TableCell className='text-right'>
-                <span className='text-xs text-gray-400'>
-                  #{tx.transactionId.slice(-8)}
-                </span>
+                <Button
+                  variant='ghost'
+                  size='sm'
+                  onClick={() => handleDownload(tx.id)}
+                  disabled={downloadingId === tx.id || tx.status !== 'SUCCESS'}
+                >
+                  {downloadingId === tx.id ? (
+                    <Loader2 className='h-4 w-4 animate-spin' />
+                  ) : (
+                    <Download className='h-4 w-4' />
+                  )}
+                  <span className='sr-only'>Download</span>
+                </Button>
               </TableCell>
             </TableRow>
           ))}

@@ -80,3 +80,21 @@ export async function getEnabledGateways(): Promise<string[]> {
 export async function cancelMySubscription(): Promise<void> {
   await apiClient.post('/payment/subscription/cancel');
 }
+
+export async function downloadInvoice(transactionId: number): Promise<void> {
+  const response = await apiClient.get<Blob>(
+    `/payment/invoices/${transactionId}`,
+    {
+      responseType: 'blob'
+    }
+  );
+
+  // Create download link
+  const url = window.URL.createObjectURL(new Blob([response.data]));
+  const link = document.createElement('a');
+  link.href = url;
+  link.setAttribute('download', `invoice_${transactionId}.pdf`);
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+}
