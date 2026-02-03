@@ -112,3 +112,31 @@ export async function getDashboardStats(): Promise<DashboardStats> {
   );
   return response.data;
 }
+
+export interface ChartData {
+  label: string;
+  value: number;
+}
+
+export async function getDailyRevenue(): Promise<ChartData[]> {
+  const response = await apiClient.get<ChartData[]>(
+    '/admin/payment/dashboard/chart/revenue/daily'
+  );
+  return response.data;
+}
+
+export async function getMonthlyRevenue(): Promise<ChartData[]> {
+  const response = await apiClient.get<ChartData[]>(
+    '/admin/payment/dashboard/chart/revenue/monthly'
+  );
+  return response.data;
+}
+
+export async function getRecentTransactionsAdmin(): Promise<
+  PaymentTransaction[]
+> {
+  const response = await apiClient.get<PaymentTransaction[]>(
+    '/admin/payment/dashboard/transactions/recent'
+  );
+  return response.data;
+}

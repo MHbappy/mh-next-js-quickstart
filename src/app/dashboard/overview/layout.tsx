@@ -1,16 +1,5 @@
 import PageContainer from '@/components/layout/page-container';
-import { DashboardStatsGrid } from '@/features/payment/components/DashboardStatsGrid';
-import { Badge } from '@/components/ui/badge';
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardAction,
-  CardFooter
-} from '@/components/ui/card';
-import { IconTrendingDown, IconTrendingUp } from '@tabler/icons-react';
-import React from 'react';
+import { DashboardViewSwitcher } from '@/features/overview/components/DashboardViewSwitcher';
 
 export default function OverViewLayout({
   sales,
@@ -31,16 +20,7 @@ export default function OverViewLayout({
             Hi, Welcome back 👋
           </h2>
         </div>
-
-        <DashboardStatsGrid />
-        <div className='grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-7'>
-          {/* <div className='col-span-4'>{bar_stats}</div>
-          <div className='col-span-4 md:col-span-3'>
-            {sales}
-          </div>
-          <div className='col-span-4'>{area_stats}</div>
-          <div className='col-span-4 md:col-span-3'>{pie_stats}</div> */}
-        </div>
+        <DashboardViewSwitcher />
       </div>
     </PageContainer>
   );
