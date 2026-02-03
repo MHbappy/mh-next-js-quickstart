@@ -84,6 +84,14 @@ export const navItems: NavItem[] = [
     access: { role: 'ROLE_ADMIN' }
   },
   {
+    title: 'Active Subscribers',
+    url: '/dashboard/admin/subscribers',
+    icon: 'userPen',
+    isActive: false,
+    items: [],
+    access: { role: 'ROLE_ADMIN' }
+  },
+  {
     title: 'Billing',
     url: '/dashboard/billing',
     icon: 'billing',

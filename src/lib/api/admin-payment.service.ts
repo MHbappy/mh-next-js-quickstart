@@ -140,3 +140,20 @@ export async function getRecentTransactionsAdmin(): Promise<
   );
   return response.data;
 }
+
+export interface ActiveSubscriber {
+  userId: number;
+  email: string;
+  firstName: string;
+  lastName: string;
+  planName: string;
+  status: string;
+  currentPeriodEnd: string;
+}
+
+export async function getActiveSubscribers(): Promise<ActiveSubscriber[]> {
+  const response = await apiClient.get<ActiveSubscriber[]>(
+    '/admin/payment/dashboard/subscribers/active'
+  );
+  return response.data;
+}
