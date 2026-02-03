@@ -14,10 +14,17 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Info, Check } from 'lucide-react';
 import { useSubscription } from '@/hooks/use-subscription';
 import { Skeleton } from '@/components/ui/skeleton';
+import { PaymentHistoryTable } from '@/features/payment/components/PaymentHistoryTable';
 
 export default function BillingPage() {
-  const { plans, subscription, loading, handleCheckout, enabledGateways } =
-    useSubscription();
+  const {
+    plans,
+    subscription,
+    transactions,
+    loading,
+    handleCheckout,
+    enabledGateways
+  } = useSubscription();
 
   return (
     <PageContainer>
@@ -127,6 +134,13 @@ export default function BillingPage() {
               </Card>
             ))
           )}
+        </div>
+
+        <div className='mt-10'>
+          <h2 className='mb-4 text-2xl font-bold tracking-tight'>
+            Payment History
+          </h2>
+          <PaymentHistoryTable transactions={transactions} />
         </div>
       </div>
     </PageContainer>

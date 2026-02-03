@@ -15,6 +15,21 @@ export interface CheckoutResponse {
   url: string;
 }
 
+export interface PaymentTransaction {
+  id: number;
+  userId: number;
+  userEmail?: string;
+  amount: number;
+  currency: string;
+  gateway: string;
+  transactionId: string;
+  status: 'SUCCESS' | 'PENDING' | 'FAILED' | 'REFUNDED';
+  type: string;
+  description: string;
+  failureReason?: string;
+  createdAt: string;
+}
+
 export async function getActivePlans(): Promise<SubscriptionPlan[]> {
   const response = await apiClient.get<SubscriptionPlan[]>('/payment/plans');
   return response.data;
@@ -48,6 +63,13 @@ export async function getMySubscription(): Promise<any> {
     }
     throw error;
   }
+}
+
+export async function getMyTransactions(): Promise<PaymentTransaction[]> {
+  const response = await apiClient.get<PaymentTransaction[]>(
+    '/payment/transactions'
+  );
+  return response.data;
 }
 
 export async function getEnabledGateways(): Promise<string[]> {

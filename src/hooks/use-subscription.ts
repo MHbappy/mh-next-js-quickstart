@@ -4,6 +4,7 @@ import {
   initiateCheckout,
   getMySubscription,
   getEnabledGateways,
+  getMyTransactions,
   SubscriptionPlan
 } from '@/lib/api/subscription.service';
 
@@ -13,18 +14,21 @@ export function useSubscription() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [enabledGateways, setEnabledGateways] = useState<string[]>([]);
+  const [transactions, setTransactions] = useState<any[]>([]);
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const [plansData, subData, gateways] = await Promise.all([
+        const [plansData, subData, gateways, txData] = await Promise.all([
           getActivePlans(),
           getMySubscription(),
-          getEnabledGateways()
+          getEnabledGateways(),
+          getMyTransactions()
         ]);
         setPlans(plansData);
         setSubscription(subData);
         setEnabledGateways(gateways);
+        setTransactions(txData);
       } catch (err: any) {
         // Fallback for demo
         console.error(err);
@@ -54,6 +58,7 @@ export function useSubscription() {
   return {
     plans,
     subscription,
+    transactions,
     loading,
     error,
     enabledGateways,

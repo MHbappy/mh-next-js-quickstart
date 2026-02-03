@@ -84,6 +84,15 @@ export const navItems: NavItem[] = [
     access: { role: 'ROLE_ADMIN' }
   },
   {
+    title: 'Billing',
+    url: '/dashboard/billing',
+    icon: 'billing',
+    shortcut: ['b', 'b'],
+    isActive: false,
+    items: [],
+    access: { role: 'ROLE_USER' }
+  },
+  {
     title: 'Account',
     url: '#', // Placeholder as there is no direct link for the parent
     icon: 'account',
@@ -94,14 +103,6 @@ export const navItems: NavItem[] = [
         url: '/dashboard/profile',
         icon: 'profile',
         shortcut: ['m', 'm']
-        // No access restriction
-      },
-      {
-        title: 'Billing',
-        url: '/dashboard/billing',
-        icon: 'billing',
-        shortcut: ['b', 'b'],
-        access: { role: 'ROLE_USER' } // Allow users to see billing
       }
     ]
   }

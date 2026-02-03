@@ -1,4 +1,5 @@
 import { apiClient } from './client';
+import { PaymentTransaction } from './subscription.service';
 
 export interface GatewayConfigDto {
   gatewayName: 'STRIPE' | 'PAYPAL';
@@ -74,6 +75,40 @@ export async function updateSubscriptionPlan(
   const response = await apiClient.put<SubscriptionPlan>(
     `/admin/payment/plans/${id}`,
     plan
+  );
+  return response.data;
+}
+
+export async function getAllTransactions(): Promise<PaymentTransaction[]> {
+  const response = await apiClient.get<PaymentTransaction[]>(
+    '/admin/payment/transactions'
+  );
+  return response.data;
+}
+
+export async function getUserTransactionsAdmin(
+  userId: number
+): Promise<PaymentTransaction[]> {
+  const response = await apiClient.get<PaymentTransaction[]>(
+    `/admin/payment/transactions/user/${userId}`
+  );
+  return response.data;
+}
+
+export interface DashboardStats {
+  totalRevenue: number;
+  todaysRevenue: number;
+  activeSubscriptions: number;
+  totalUsers: number;
+  monthlyRecurringRevenue?: number;
+  failedPayments?: number;
+  churnedSubscriptions?: number;
+  activeTrials?: number;
+}
+
+export async function getDashboardStats(): Promise<DashboardStats> {
+  const response = await apiClient.get<DashboardStats>(
+    '/admin/payment/dashboard/stats'
   );
   return response.data;
 }

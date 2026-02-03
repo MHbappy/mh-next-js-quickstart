@@ -26,7 +26,9 @@ import { UserChangePasswordDialog } from './user-change-password-dialog';
 import { CreateUserDialog } from './create-user-dialog';
 import { VerifyUserDialog } from './verify-user-dialog';
 import { UpdateRolesDialog } from './update-roles-dialog';
+import { UserPaymentHistoryDialog } from './user-payment-history-dialog';
 import { toast } from 'sonner';
+
 import {
   Search,
   ChevronLeft,
@@ -56,6 +58,7 @@ export function UserTable() {
   const [createUserOpen, setCreateUserOpen] = React.useState(false);
   const [verifyUserOpen, setVerifyUserOpen] = React.useState(false);
   const [updateRolesOpen, setUpdateRolesOpen] = React.useState(false);
+  const [paymentHistoryOpen, setPaymentHistoryOpen] = React.useState(false);
 
   const currentPage = parseInt(page);
 
@@ -111,6 +114,11 @@ export function UserTable() {
     setUpdateRolesOpen(true);
   };
 
+  const handleViewPaymentHistory = (user: User) => {
+    setSelectedUser(user);
+    setPaymentHistoryOpen(true);
+  };
+
   const handleStatusUpdateSuccess = () => {
     fetchUsers();
   };
@@ -122,7 +130,8 @@ export function UserTable() {
         onToggleStatus: handleToggleStatus,
         onChangePassword: handleChangePassword,
         onVerifyUser: handleVerifyUser,
-        onUpdateRoles: handleUpdateRoles
+        onUpdateRoles: handleUpdateRoles,
+        onViewPaymentHistory: handleViewPaymentHistory
       }),
     []
   );
@@ -297,6 +306,11 @@ export function UserTable() {
         open={updateRolesOpen}
         onOpenChange={setUpdateRolesOpen}
         onSuccess={handleStatusUpdateSuccess}
+      />
+      <UserPaymentHistoryDialog
+        user={selectedUser}
+        open={paymentHistoryOpen}
+        onOpenChange={setPaymentHistoryOpen}
       />
     </div>
   );

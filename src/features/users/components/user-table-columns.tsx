@@ -19,7 +19,8 @@ import {
   CheckCircle,
   Key,
   Shield,
-  BadgeCheck
+  BadgeCheck,
+  CreditCard
 } from 'lucide-react';
 import { format } from 'date-fns';
 
@@ -46,6 +47,7 @@ interface UserColumnProps {
   onChangePassword: (user: User) => void;
   onVerifyUser: (user: User) => void;
   onUpdateRoles: (user: User) => void;
+  onViewPaymentHistory: (user: User) => void;
 }
 
 export const createUserColumns = ({
@@ -53,7 +55,8 @@ export const createUserColumns = ({
   onToggleStatus,
   onChangePassword,
   onVerifyUser,
-  onUpdateRoles
+  onUpdateRoles,
+  onViewPaymentHistory
 }: UserColumnProps): ColumnDef<User>[] => [
   {
     accessorKey: 'email',
@@ -141,6 +144,10 @@ export const createUserColumns = ({
             <DropdownMenuItem onClick={() => onChangePassword(user)}>
               <Key className='mr-2 h-4 w-4' />
               Change Password
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => onViewPaymentHistory(user)}>
+              <CreditCard className='mr-2 h-4 w-4' />
+              Payment History
             </DropdownMenuItem>
             {user.status === UserStatus.PENDING_VERIFICATION && (
               <DropdownMenuItem onClick={() => onVerifyUser(user)}>
