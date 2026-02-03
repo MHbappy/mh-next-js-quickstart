@@ -16,6 +16,20 @@ import { useSubscription } from '@/hooks/use-subscription';
 import { Skeleton } from '@/components/ui/skeleton';
 import { PaymentHistoryTable } from '@/features/payment/components/PaymentHistoryTable';
 
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle
+} from '@/components/ui/alert-dialog';
+import { useState } from 'react';
+
+import { toast } from 'sonner';
+
 export default function BillingPage() {
   const {
     plans,
@@ -23,8 +37,27 @@ export default function BillingPage() {
     transactions,
     loading,
     handleCheckout,
-    enabledGateways
+    enabledGateways,
+    // @ts-ignore
+    cancelSubscription
   } = useSubscription();
+
+  const [showCancelDialog, setShowCancelDialog] = useState(false);
+  const [canceling, setCanceling] = useState(false);
+
+  const handleCancelSubscription = async () => {
+    try {
+      setCanceling(true);
+      // @ts-ignore
+      await cancelSubscription();
+      toast.success('Subscription canceled successfully');
+      setShowCancelDialog(false);
+    } catch (e) {
+      toast.error('Failed to cancel subscription');
+    } finally {
+      setCanceling(false);
+    }
+  };
 
   return (
     <PageContainer>
@@ -90,9 +123,18 @@ export default function BillingPage() {
                 </CardContent>
                 <CardFooter>
                   {subscription?.plan?.id === plan.id ? (
-                    <Button disabled className='w-full'>
-                      Current Plan
-                    </Button>
+                    <div className='w-full space-y-2'>
+                      <Button disabled className='w-full' variant='outline'>
+                        Current Plan
+                      </Button>
+                      <Button
+                        variant='destructive'
+                        className='w-full'
+                        onClick={() => setShowCancelDialog(true)}
+                      >
+                        Cancel Subscription
+                      </Button>
+                    </div>
                   ) : (
                     <div className='space-y-2'>
                       {plan.price === 0 ? (
@@ -142,6 +184,34 @@ export default function BillingPage() {
           </h2>
           <PaymentHistoryTable transactions={transactions} />
         </div>
+
+        <AlertDialog open={showCancelDialog} onOpenChange={setShowCancelDialog}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Cancel Subscription?</AlertDialogTitle>
+              <AlertDialogDescription>
+                Are you sure you want to cancel your subscription? You will lose
+                access to premium features at the end of your current billing
+                period.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel disabled={canceling}>
+                Keep Subscription
+              </AlertDialogCancel>
+              <AlertDialogAction
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleCancelSubscription();
+                }}
+                disabled={canceling}
+                className='bg-destructive text-destructive-foreground hover:bg-destructive/90'
+              >
+                {canceling ? 'Canceling...' : 'Confirm Cancellation'}
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
     </PageContainer>
   );

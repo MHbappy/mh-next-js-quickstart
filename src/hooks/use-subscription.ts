@@ -5,6 +5,7 @@ import {
   getMySubscription,
   getEnabledGateways,
   getMyTransactions,
+  cancelMySubscription,
   SubscriptionPlan
 } from '@/lib/api/subscription.service';
 
@@ -62,6 +63,20 @@ export function useSubscription() {
     loading,
     error,
     enabledGateways,
-    handleCheckout
+    handleCheckout,
+    cancelSubscription: async () => {
+      try {
+        setLoading(true);
+        await cancelMySubscription();
+        // Refresh data
+        const subData = await getMySubscription();
+        setSubscription(subData);
+      } catch (err) {
+        console.error(err);
+        throw err;
+      } finally {
+        setLoading(false);
+      }
+    }
   };
 }

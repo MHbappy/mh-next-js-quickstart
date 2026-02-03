@@ -151,9 +151,27 @@ export interface ActiveSubscriber {
   currentPeriodEnd: string;
 }
 
-export async function getActiveSubscribers(): Promise<ActiveSubscriber[]> {
-  const response = await apiClient.get<ActiveSubscriber[]>(
-    '/admin/payment/dashboard/subscribers/active'
+export interface PageResponse<T> {
+  content: T[];
+  totalPages: number;
+  totalElements: number;
+  size: number;
+  number: number;
+}
+
+export async function getActiveSubscribers(
+  page: number = 0,
+  size: number = 10
+): Promise<PageResponse<ActiveSubscriber>> {
+  const response = await apiClient.get<PageResponse<ActiveSubscriber>>(
+    '/admin/payment/dashboard/subscribers/active',
+    {
+      params: { page, size }
+    }
   );
   return response.data;
+}
+
+export async function cancelUserSubscription(userId: number): Promise<void> {
+  await apiClient.post(`/admin/payment/subscription/cancel/${userId}`);
 }

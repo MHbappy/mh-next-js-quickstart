@@ -76,3 +76,7 @@ export async function getEnabledGateways(): Promise<string[]> {
   const response = await apiClient.get<string[]>('/payment/config');
   return response.data;
 }
+
+export async function cancelMySubscription(): Promise<void> {
+  await apiClient.post('/payment/subscription/cancel');
+}
